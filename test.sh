@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 li="\033[1;34m↪\033[0m "  # List item
+ok="\033[0;32m✔️\033[0m "  # OK
 
 while IFS="" read -r file_path
 do
@@ -31,3 +32,13 @@ flake8 .
 echo -e "${li:?}Checking Python types..."
 mypy wordgoal
 mypy tests
+
+echo -e "${li:?}Running tests..."
+pytest
+
+echo -e "${li:?}Running smoke test..."
+python -m wordgoal --width 80 > smoke.txt
+cmp ./tests/this-project.txt smoke.txt
+rm smoke.txt
+
+echo -e "${ok:?}OK!"
