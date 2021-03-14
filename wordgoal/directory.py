@@ -2,7 +2,7 @@ from functools import cached_property
 from logging import getLogger
 from os.path import relpath
 from pathlib import Path
-from typing import Any, Dict, Optional, cast
+from typing import Any, Dict, List, Optional, cast
 
 from progrow import Rows
 from yaml import safe_load
@@ -46,20 +46,6 @@ class Directory:
             maximum=goal,
         )
 
-    def analyse_path(self, path: Path) -> None:
-        """
-        Analyses the filesystem object.
-
-        Arguments:
-            path: Path.
-        """
-        if self.ignore(path.name):
-            self.logger.debug('Ignoring "%s"', path.name)
-        elif path.is_dir():
-            Directory(directory=path, parent=self).walk()
-        elif path.is_file():
-            self.analyse_file(path)
-
     @cached_property
     def config(self) -> Dict[str, Any]:
         """ Gets this directory's configuration. """
@@ -88,5 +74,16 @@ class Directory:
 
     def walk(self) -> None:
         """ Walks this directory. """
+
+        files: List[Path] = []
+
         for path in self.directory.iterdir():
-            self.analyse_path(path)
+            if self.ignore(path.name):
+                self.logger.debug('Ignoring "%s"', path.name)
+            elif path.is_dir():
+                Directory(directory=path, parent=self).walk()
+            elif path.is_file():
+                files.append(path)
+
+        for path in files:
+            self.analyse_file(path)

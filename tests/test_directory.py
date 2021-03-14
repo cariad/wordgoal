@@ -72,51 +72,6 @@ def test_analyse_file__unhandled(
     words_in_text_file.assert_not_called()
 
 
-def test_analyse_path__directory() -> None:
-    with patch("wordgoal.directory.Directory.analyse_file") as analyse_file:
-        directory = Directory(Path("."))
-        path = directory.directory.joinpath("wordgoal")
-
-        with patch("wordgoal.directory.Directory") as directory_maker:
-            directory.analyse_path(path)
-            analyse_file.assert_not_called()
-            directory_maker.assert_called_with(directory=path, parent=directory)
-
-
-def test_analyse_path__file() -> None:
-    with patch("wordgoal.directory.Directory.analyse_file") as analyse_file:
-        directory = Directory(Path("."))
-        path = directory.directory.joinpath("Pipfile")
-
-        with patch("wordgoal.directory.Directory") as directory_maker:
-            directory.analyse_path(path)
-            analyse_file.assert_called_with(path)
-            directory_maker.assert_not_called()
-
-
-def test_analyse_path__ignored() -> None:
-    with patch("wordgoal.directory.Directory.analyse_file") as analyse_file:
-        directory = Directory(Path("."))
-
-        with patch("wordgoal.directory.Directory") as directory_maker:
-            directory.analyse_path(Path(".").joinpath(".git"))
-            analyse_file.assert_not_called()
-            directory_maker.assert_not_called()
-
-
-def test_analyse_path__special() -> None:
-    with patch("wordgoal.directory.Directory.analyse_file") as analyse_file:
-        directory = Directory(Path("."))
-        path = Mock()
-        path.is_dir = Mock(return_value=False)
-        path.is_file = Mock(return_value=False)
-
-        with patch("wordgoal.directory.Directory") as directory_maker:
-            directory.analyse_path(path)
-            analyse_file.assert_not_called()
-            directory_maker.assert_not_called()
-
-
 @mark.parametrize(
     "directory, name, expect",
     [
@@ -143,9 +98,15 @@ def test_root__root() -> None:
     assert Directory(root_path.joinpath("wordgoal"), root_dir).root == root_path
 
 
-@patch("wordgoal.directory.Directory.analyse_path")
-def test_walk(analyse_path: Mock) -> None:
+@patch("wordgoal.directory.Directory.analyse_file")
+def test_walk(analyse_file: Mock) -> None:
     root = Path(".")
-    Directory(root).walk()
-    analyse_path.assert_any_call(root.joinpath("wordgoal"))
-    analyse_path.assert_any_call(root.joinpath("Pipfile"))
+    directory = Directory(root)
+
+    with patch("wordgoal.directory.Directory") as directory_maker:
+        directory.walk()
+
+    directory_maker.assert_any_call(
+        directory=root.joinpath("wordgoal"), parent=directory
+    )
+    analyse_file.assert_any_call(root.joinpath("Pipfile"))
