@@ -37,9 +37,9 @@ echo -e "${li:?}Running tests..."
 pytest
 
 echo -e "${li:?}Running smoke test..."
-python -m wordgoal --width 80 > smoke.txt
-cmp ./tests/this-project.txt smoke.txt
-rm smoke.txt
+python -m wordgoal --width 80 > smoke.out
+cmp ./tests/this-project.out smoke.out
+rm smoke.out
 
 echo -e "${li:?}Building..."
 echo "${1:--1.-1.-1}" > wordgoal/VERSION
