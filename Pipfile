@@ -17,6 +17,7 @@ mypy = "*"
 pytest = "*"
 pytest-cov = "*"
 yamllint = "*"
+mock = "*"
 
 [requires]
 python_version = "3.9"
