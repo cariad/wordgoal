@@ -1,0 +1,6 @@
+ignore:
+  - .git
+  - .mypy_cache
+  - .pytest_cache
+  - .venv
+  - wordgoal.egg-info
