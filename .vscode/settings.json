@@ -1,0 +1,14 @@
+{
+  "cSpell.words": [
+    "cariad",
+    "codecov",
+    "pipenv",
+    "pipfile",
+    "pytest",
+    "venv",
+    "virtualenvs",
+    "wordgoal",
+    "yamllint"
+  ],
+  "python.pythonPath": ".venv/bin/python3.9"
+}
