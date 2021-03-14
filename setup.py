@@ -47,7 +47,9 @@ setup(
     include_package_data=True,
     install_requires=[
         "boringmd~=1.0",
+        "colorama~=0.4.4",
         "progrow~=1.0",
+        "pyyaml~=5.4.1",
     ],
     license="MIT License",
     long_description=long_description,

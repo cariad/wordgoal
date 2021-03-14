@@ -13,6 +13,7 @@
     "pypa",
     "pypi",
     "pytest",
+    "pyyaml",
     "refs",
     "venv",
     "virtualenvs",
