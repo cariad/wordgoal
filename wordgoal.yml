@@ -1,0 +1,3 @@
+ignore:
+  - .pytest_cache
+  - .venv
