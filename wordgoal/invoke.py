@@ -62,7 +62,9 @@ def invoke_unsafe(args: Optional[List[str]] = None) -> str:
     directory.walk()
 
     style = Style(
-        show_fraction=True,
+        color=directory.style.color,
+        show_fraction=directory.style.fractions,
+        show_percent=directory.style.percentages,
         width=int(parsed_args.width) if parsed_args.width else None,
     )
 
