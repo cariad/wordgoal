@@ -1,6 +1,15 @@
+default:
+  goal: 100
+files:
+  README.md:
+    goal: 80
 ignore:
   - .git
   - .mypy_cache
   - .pytest_cache
   - .venv
   - wordgoal.egg-info
+style:
+  color: true
+  fractions: true
+  percentages: false
