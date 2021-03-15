@@ -21,7 +21,7 @@ def markdown_goal(file: Path) -> Optional[int]:
     return None
 
 
-def words_in_markdown_file(file: Path) -> int:
+def words_in_markdown(file: Path) -> int:
     """
     Returns the number of words in a Markdown file.
 
