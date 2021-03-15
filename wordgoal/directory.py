@@ -7,8 +7,9 @@ from typing import Any, Dict, List, Optional, cast
 from progrow import Rows
 from yaml import safe_load
 
-from wordgoal.count import words_in_markdown_file, words_in_text_file
+from wordgoal.config import Defaults, Files, Style
 from wordgoal.document_types import DocumentType, get_document_type
+from wordgoal.documents import markdown_goal, words_in_markdown, words_in_text
 
 
 class Directory:
@@ -32,11 +33,11 @@ class Directory:
         document_type = get_document_type(file.suffix)
 
         if document_type == DocumentType.MARKDOWN:
-            count = words_in_markdown_file(file)
-            goal = 600
+            count = words_in_markdown(file)
+            goal = markdown_goal(file) or self.files.goal(file.name)
         elif document_type == DocumentType.TEXT:
-            count = words_in_text_file(file)
-            goal = 600
+            count = words_in_text(file)
+            goal = self.files.goal(file.name)
         else:
             return
 
@@ -55,6 +56,20 @@ class Directory:
         except FileNotFoundError:
             return {}
 
+    @cached_property
+    def defaults(self) -> Defaults:
+        return Defaults(
+            parent=self.parent.defaults if self.parent else None,
+            values=self.config.get("defaults", None),
+        )
+
+    @cached_property
+    def files(self) -> Files:
+        return Files(
+            defaults=self.defaults,
+            values=self.config.get("files", None),
+        )
+
     def ignore(self, name: str) -> bool:
         """
         Indicates whether or not to ignore an object in this directory.
@@ -71,6 +86,14 @@ class Directory:
     def root(self) -> Path:
         """ Gets the root directory of this walk. """
         return self.parent.root if self.parent else self.directory
+
+    @cached_property
+    def style(self) -> Style:
+        """ Gets this directory's style configuration. """
+        return Style(
+            parent=self.parent.style if self.parent else None,
+            values=self.config.get("style", None),
+        )
 
     def walk(self) -> None:
         """ Walks this directory. """
