@@ -6,7 +6,7 @@ from wordgoal.types import DefaultsDictionary
 
 class Defaults:
     """
-    Describes the default values for a directory's configuration.
+    Describes a directory's default configuration.
 
     Arguments:
         parent: Parent directory's configuration, if any.
