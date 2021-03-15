@@ -4,7 +4,7 @@ from typing import Optional
 from yaml import safe_load
 
 from tests.data import expect_count, get
-from wordgoal.documents.markdown import markdown_goal, words_in_markdown_file
+from wordgoal.documents.markdown import markdown_goal, words_in_markdown
 
 
 def expect_goal(path: Path) -> Optional[int]:
@@ -18,6 +18,6 @@ def test_markdown_goal() -> None:
         assert markdown_goal(path) == expect_goal(path)
 
 
-def test_words_in_markdown_file() -> None:
+def test_words_in_markdown() -> None:
     for path in get(".md"):
-        assert words_in_markdown_file(path) == expect_count(path), path
+        assert words_in_markdown(path) == expect_count(path), path
