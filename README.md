@@ -6,6 +6,14 @@
 
 ![wordgoal example](https://github.com/cariad/wordgoal/raw/main/example.png)
 
+## Installation
+
+`wordgoal` requires Python 3.8 or later.
+
+```bash
+pip install wordgoal
+```
+
 ## Configuration
 
 `wordgoal` reads configuration from a YAML file named `wordgoal.yml` inside each directory.
