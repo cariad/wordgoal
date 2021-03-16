@@ -21,6 +21,8 @@ class Directory:
     """
 
     def __init__(self, path: Path, parent: Optional["Directory"] = None) -> None:
+        if not path.exists():
+            raise FileNotFoundError(path)
         self.directory = path if path.is_dir() else path.parent
         self.file = path if path.is_file() else None
 

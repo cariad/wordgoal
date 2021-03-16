@@ -90,12 +90,12 @@ def test_ignore(directory: Path, name: str, expect: bool) -> None:
 
 
 def test_root__child() -> None:
-    root = Directory(Path(__file__).parent)
+    root = Directory(Path(__file__).parent.parent)
     assert Directory(root.directory.joinpath("wordgoal"), root).root == root.directory
 
 
 def test_root__root() -> None:
-    root_path = Path(__file__).parent
+    root_path = Path(__file__).parent.parent
     root_dir = Directory(root_path)
     assert root_dir.root == root_path
     assert Directory(root_path.joinpath("wordgoal"), root_dir).root == root_path
@@ -110,7 +110,7 @@ def test_walk(analyse_file: Mock) -> None:
         directory.walk()
 
     directory_maker.assert_any_call(
-        directory=root.joinpath("wordgoal"),
+        path=root.joinpath("wordgoal"),
         parent=directory,
     )
     analyse_file.assert_any_call(root.joinpath("Pipfile"))
