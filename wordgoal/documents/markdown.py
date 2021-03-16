@@ -12,9 +12,10 @@ logger = getLogger("wordgoal")
 
 def markdown_goal(file: Path) -> Optional[int]:
     """ Gets the document's goal from its front matter. """
-    if fm := front_matter_from_file(file):
+    if front_matter := front_matter_from_file(file):
+        logger.debug("Got front matter: %s", front_matter)
         try:
-            return int(safe_load(fm)["goal"]["words"])
+            return int(safe_load(front_matter)["goal"]["words"])
         except KeyError:
             pass
     logger.debug('"%s" does not prescribe a goal in its front matter', file)
