@@ -1,18 +1,15 @@
 from logging import getLogger
 from pathlib import Path
-from typing import Optional
-
-from boringmd import from_file
 
 logger = getLogger("wordgoal")
 
 
-def words_in_string(text: Optional[str]) -> int:
+def words_in_string(text: str) -> int:
     """
     Counts the words in a string.
 
     Arguments:
-        text: Text to read.
+        text: Body.
 
     Returns:
         Word count.
@@ -36,9 +33,9 @@ def words_in_string(text: Optional[str]) -> int:
     return count
 
 
-def words_in_markdown_file(file: Path) -> int:
+def words_in_text(file: Path) -> int:
     """
-    Returns the number of words in a Markdown file.
+    Counts the words in a plain text file.
 
     Arguments:
         file: File.
@@ -46,18 +43,6 @@ def words_in_markdown_file(file: Path) -> int:
     Returns:
         Word count.
     """
-    return words_in_string(from_file(file))
 
-
-def words_in_text_file(file: Path) -> int:
-    """
-    Returns the number of words in a plain text file.
-
-    Arguments:
-        file: File.
-
-    Returns:
-        Word count.
-    """
     with open(file, "r") as stream:
         return words_in_string(stream.read())

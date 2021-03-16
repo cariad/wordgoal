@@ -7,8 +7,9 @@ from typing import Any, Dict, List, Optional, cast
 from progrow import Rows
 from yaml import safe_load
 
-from wordgoal.count import words_in_markdown_file, words_in_text_file
+from wordgoal.config import Defaults, Files, Style
 from wordgoal.document_types import DocumentType, get_document_type
+from wordgoal.documents import markdown_goal, words_in_markdown, words_in_text
 
 
 class Directory:
@@ -16,27 +17,31 @@ class Directory:
     Directory walker.
 
     Arguments:
-        root: File or directory.
+        path: File or directory.
     """
 
-    def __init__(self, directory: Path, parent: Optional["Directory"] = None) -> None:
-        self.directory = directory
+    def __init__(self, path: Path, parent: Optional["Directory"] = None) -> None:
+        if not path.exists():
+            raise FileNotFoundError(path)
+        self.directory = path if path.is_dir() else path.parent
+        self.file = path if path.is_file() else None
+
         self.logger = getLogger("wordgoal")
         self.parent = parent
         self.rows: Rows = parent.rows if parent else Rows()
 
-        self.logger.debug("Created %s for: %s", self.__class__.__name__, directory)
+        self.logger.debug("Created %s for: %s", self.__class__.__name__, path)
 
     def analyse_file(self, file: Path) -> None:
         self.logger.debug("Analysing file: %s", file)
         document_type = get_document_type(file.suffix)
 
         if document_type == DocumentType.MARKDOWN:
-            count = words_in_markdown_file(file)
-            goal = 600
+            count = words_in_markdown(file)
+            goal = markdown_goal(file) or self.files.goal(file.name)
         elif document_type == DocumentType.TEXT:
-            count = words_in_text_file(file)
-            goal = 600
+            count = words_in_text(file)
+            goal = self.files.goal(file.name)
         else:
             return
 
@@ -55,6 +60,20 @@ class Directory:
         except FileNotFoundError:
             return {}
 
+    @cached_property
+    def defaults(self) -> Defaults:
+        return Defaults(
+            parent=self.parent.defaults if self.parent else None,
+            values=self.config.get("defaults", None),
+        )
+
+    @cached_property
+    def files(self) -> Files:
+        return Files(
+            defaults=self.defaults,
+            values=self.config.get("files", None),
+        )
+
     def ignore(self, name: str) -> bool:
         """
         Indicates whether or not to ignore an object in this directory.
@@ -72,18 +91,33 @@ class Directory:
         """ Gets the root directory of this walk. """
         return self.parent.root if self.parent else self.directory
 
+    @cached_property
+    def style(self) -> Style:
+        """ Gets this directory's style configuration. """
+        return Style(
+            parent=self.parent.style if self.parent else None,
+            values=self.config.get("style", None),
+        )
+
     def walk(self) -> None:
         """ Walks this directory. """
 
+        directories: List[Path] = []
         files: List[Path] = []
 
-        for path in self.directory.iterdir():
-            if self.ignore(path.name):
-                self.logger.debug('Ignoring "%s"', path.name)
-            elif path.is_dir():
-                Directory(directory=path, parent=self).walk()
-            elif path.is_file():
-                files.append(path)
+        if self.file:
+            files.append(self.file)
+        else:
+            for path in self.directory.iterdir():
+                if self.ignore(path.name):
+                    self.logger.debug('Ignoring "%s"', path.name)
+                elif path.is_dir():
+                    directories.append(path)
+                elif path.is_file():
+                    files.append(path)
 
-        for path in files:
+        for directory in sorted(directories):
+            Directory(path=directory, parent=self).walk()
+
+        for path in sorted(files):
             self.analyse_file(path)

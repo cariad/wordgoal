@@ -1,6 +1,6 @@
 ---
-foo:
-  bar: goo
+goal:
+  words: 10
 ---
 # I love gummy cakes
 

@@ -4,20 +4,20 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+boringmd = "~=1.1.0"
 colorama = "~=0.4.4"
-progrow = "~=1.0"
+progrow = "~=1.0.1"
 pyyaml = "~=5.4.1"
-boringmd = "~=1.0"
 
 [dev-packages]
 black = "==20.8b1"
 flake8 = "*"
 isort = "*"
+mock = "*"
 mypy = "*"
 pytest = "*"
 pytest-cov = "*"
 yamllint = "*"
-mock = "*"
 
 [requires]
 python_version = "3.9"

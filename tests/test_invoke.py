@@ -8,7 +8,7 @@ def test_invoke__version() -> None:
 
 
 def test_invoke__invalid_path() -> None:
-    assert invoke(["--path", "foo"]) == 1
+    assert invoke(["foo"]) == 1
 
 
 def test_invoke_unsafe__version() -> None:
