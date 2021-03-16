@@ -25,7 +25,7 @@ def invoke_unsafe(args: Optional[List[str]] = None) -> str:
         "wordgoal",
         description="Graphs your word count toward a goal.",
         epilog=(
-            "Made with ❤️ by Cariad Eccleston: "
+            "Made with \u2764 by Cariad Eccleston: "
             + "https://github.com/cariad/wordgoal • "
             + "https://cariad.io"
         ),
