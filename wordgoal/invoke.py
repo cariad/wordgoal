@@ -23,15 +23,20 @@ def invoke(args: Optional[List[str]] = None) -> int:
 def invoke_unsafe(args: Optional[List[str]] = None) -> str:
     arg_parser = ArgumentParser(
         "wordgoal",
-        description="wordgoal charts word count toward a goal.",
-        epilog="Made with ❤️ by Cariad Eccleston: https://cariad.io",
+        description="Graphs your word count toward a goal.",
+        epilog=(
+            "Made with ❤️ by Cariad Eccleston: "
+            + "https://github.com/cariad/wordgoal • "
+            + "https://cariad.io"
+        ),
     )
 
     arg_parser.add_argument(
-        "--path",
+        "path",
         default=".",
         help="file or directory to scan",
         metavar="PATH",
+        nargs="?",
     )
 
     arg_parser.add_argument(

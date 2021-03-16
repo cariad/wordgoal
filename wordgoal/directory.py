@@ -17,16 +17,18 @@ class Directory:
     Directory walker.
 
     Arguments:
-        root: File or directory.
+        path: File or directory.
     """
 
-    def __init__(self, directory: Path, parent: Optional["Directory"] = None) -> None:
-        self.directory = directory
+    def __init__(self, path: Path, parent: Optional["Directory"] = None) -> None:
+        self.directory = path if path.is_dir() else path.parent
+        self.file = path if path.is_file() else None
+
         self.logger = getLogger("wordgoal")
         self.parent = parent
         self.rows: Rows = parent.rows if parent else Rows()
 
-        self.logger.debug("Created %s for: %s", self.__class__.__name__, directory)
+        self.logger.debug("Created %s for: %s", self.__class__.__name__, path)
 
     def analyse_file(self, file: Path) -> None:
         self.logger.debug("Analysing file: %s", file)
@@ -98,15 +100,22 @@ class Directory:
     def walk(self) -> None:
         """ Walks this directory. """
 
+        directories: List[Path] = []
         files: List[Path] = []
 
-        for path in self.directory.iterdir():
-            if self.ignore(path.name):
-                self.logger.debug('Ignoring "%s"', path.name)
-            elif path.is_dir():
-                Directory(directory=path, parent=self).walk()
-            elif path.is_file():
-                files.append(path)
+        if self.file:
+            files.append(self.file)
+        else:
+            for path in self.directory.iterdir():
+                if self.ignore(path.name):
+                    self.logger.debug('Ignoring "%s"', path.name)
+                elif path.is_dir():
+                    directories.append(path)
+                elif path.is_file():
+                    files.append(path)
 
-        for path in files:
+        for directory in sorted(directories):
+            Directory(path=directory, parent=self).walk()
+
+        for path in sorted(files):
             self.analyse_file(path)

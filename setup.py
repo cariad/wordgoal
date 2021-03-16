@@ -38,7 +38,7 @@ setup(
     author="Cariad Eccleston",
     author_email="cariad@hey.com",
     classifiers=classifiers,
-    description="Charts word count toward a goal",
+    description="Graphs your word count toward a goal",
     entry_points={
         "console_scripts": [
             "wordgoal=wordgoal.__main__:cli_entry",
@@ -57,9 +57,15 @@ setup(
     name="wordgoal",
     packages=[
         "wordgoal",
+        "wordgoal.config",
+        "wordgoal.documents",
+        "wordgoal.types",
     ],
     package_data={
         "wordgoal": ["py.typed"],
+        "wordgoal.config": ["py.typed"],
+        "wordgoal.documents": ["py.typed"],
+        "wordgoal.types": ["py.typed"],
     },
     python_requires=">=3.8",
     url="https://github.com/cariad/wordgoal",
