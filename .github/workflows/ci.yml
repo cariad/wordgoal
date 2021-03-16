@@ -20,11 +20,14 @@ jobs:
       - if: steps.cache-venv.outputs.cache-hit != 'true'
         run: pipenv sync --dev
 
-      - run: pipenv run ./build.sh "${GITHUB_REF##*/}"
+      - run: pipenv run ./lint.sh
+      - run: pipenv run pytest
 
       - uses: codecov/codecov-action@v1
         with:
           fail_ci_if_error: true
+
+      - run: pipenv run ./build.sh "${GITHUB_REF##*/}"
 
       - uses: actions/upload-artifact@v2
         with:
