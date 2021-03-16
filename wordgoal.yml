@@ -2,7 +2,7 @@ default:
   goal: 100
 files:
   README.md:
-    goal: 80
+    goal: 600
 ignore:
   - .git
   - .mypy_cache
