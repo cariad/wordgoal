@@ -1,3 +1,7 @@
+---
+goal:
+  words: 600
+---
 # wordgoal
 
 ![Build](https://github.com/cariad/wordgoal/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/cariad/wordgoal/branch/main/graph/badge.svg?token=1JBzUKfPGr)](https://codecov.io/gh/cariad/wordgoal)
