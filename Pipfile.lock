@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6b6fec28e0667f7ae6e0f7f25a7caad8c5d9dd27b1859c95a81ecc3018d7bd66"
+            "sha256": "3dff7ed27dbfae052814e8c02dd2ccf140f5f6ed6ec7a44f31b486feb7b583e3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,10 +18,10 @@
     "default": {
         "boringmd": {
             "hashes": [
-                "sha256:bda1404a90d9291e764dcc34ac57bdfd6e786ae9f0b471bc7649794c9f4252ce"
+                "sha256:c09991a0176af36253d42758b714407d27b66722c9a2040ec5d9872eea7dfcc5"
             ],
             "index": "pypi",
-            "version": "==1.1.0"
+            "version": "==1.1.1"
         },
         "colorama": {
             "hashes": [
